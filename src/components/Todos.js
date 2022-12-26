@@ -1,4 +1,4 @@
-export default function Todos({ todos, handleDelete }) {
+export default function Todos({ todos, handleDelete, handleEdit }) {
   return (
     <div>
       {todos.length >= 0 && (
@@ -11,6 +11,12 @@ export default function Todos({ todos, handleDelete }) {
                 onClick={() => handleDelete(todo.id)}
               >
                 حذف
+              </button>
+              <button
+                className="add-button"
+                onClick={() => handleEdit(todo.id)}
+              >
+                تعديل
               </button>
             </div>
           ))}

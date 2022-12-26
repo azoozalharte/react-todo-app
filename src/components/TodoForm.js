@@ -4,9 +4,29 @@ import Todos from "./Todos";
 export default function TodoForm() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
-
+  const [edit, setEdit] = useState(false);
+  const [todoEdit, setTodoEdit] = useState([]);
   function handleClick() {
-    if (todo !== "") {
+    if (edit === true) {
+      console.log(todoEdit.id);
+      setTodos(
+        todos.map((todoMap) => {
+          console.log(`todomap id ${todoMap}`);
+          if (todoMap.id === todoEdit[0].id) {
+            return { ...todoMap, title: todo };
+          } else {
+            return todoMap;
+          }
+        })
+      );
+      setEdit(false);
+      setTodo("");
+      setTodoEdit([]);
+      console.log(todos);
+      return 0;
+    }
+
+    if (todo !== "" && edit === false) {
       setTodos([
         ...todos,
         {
@@ -24,10 +44,23 @@ export default function TodoForm() {
         if (todo.id !== id) {
           return todo;
         } else {
-          return;
+          return null;
         }
       })
     );
+  }
+
+  function handleEdit(id) {
+    setEdit(true);
+    todos.map((todoEditMap) => {
+      if (todoEditMap.id === id) {
+        setTodoEdit([...todoEdit, todoEditMap]);
+        setTodo(todoEditMap.title);
+        return -1;
+      }
+
+      return -1;
+    });
   }
   return (
     <div>
@@ -39,11 +72,21 @@ export default function TodoForm() {
           onChange={(e) => setTodo(e.target.value)}
           placeholder="عنوان المهمه"
         />
-        <button className="add-button" onClick={handleClick}>
-          حفظ
-        </button>
+        {edit ? (
+          <button className="add-button" onClick={handleClick}>
+            تعديل
+          </button>
+        ) : (
+          <button className="add-button" onClick={handleClick}>
+            حفظ
+          </button>
+        )}
       </div>
-      <Todos todos={todos} handleDelete={handleDelete} />
+      <Todos
+        todos={todos}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+      />
     </div>
   );
 }
